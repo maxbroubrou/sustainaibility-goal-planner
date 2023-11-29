@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 2023_11_23_164209) do
   enable_extension "plpgsql"
 
   create_table "goals", force: :cascade do |t|
-    t.string "goal_id"
     t.string "goal_name"
     t.decimal "target_reduction"
     t.string "target_unit"
@@ -27,7 +26,6 @@ ActiveRecord::Schema.define(version: 2023_11_23_164209) do
   end
 
   create_table "progresses", force: :cascade do |t|
-    t.string "entry_id", null: false
     t.bigint "goal_id", null: false
     t.datetime "entry_date"
     t.decimal "achieved_reduction"
@@ -37,5 +35,5 @@ ActiveRecord::Schema.define(version: 2023_11_23_164209) do
     t.index ["goal_id"], name: "index_progresses_on_goal_id"
   end
 
-  add_foreign_key "progresses", "goals"
+  add_foreign_key "progresses", "goals", on_delete: :cascade
 end

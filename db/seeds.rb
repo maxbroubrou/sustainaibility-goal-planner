@@ -8,7 +8,6 @@
 
 goals = Goal.create([
     {
-        goal_id: 'G001',
         goal_name: 'Reduce Carbon Emissions',
         target_reduction: 1000,
         target_unit: 'kg CO2',
@@ -16,7 +15,6 @@ goals = Goal.create([
         end_date: '2023-12-31'
     },
     {
-        goal_id: 'G002',
         goal_name: 'Increase Energy Efficiency',
         target_reduction: 500,
         target_unit: 'kWh',
@@ -27,14 +25,12 @@ goals = Goal.create([
 
 progress = Progress.create([
     {   
-        entry_id: 'E001',
         goal_id: 1,
         entry_date: '2023-05-15',
         achieved_reduction: 25,
         notes: 'Implemented in office areas.'
     },
     {
-        entry_id: 'E002',
         goal_id: 2,
         entry_date: '2023-06-20',
         achieved_reduction: 100,

@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :goals, param: :goal_id
-      resources :progresses, param: :entry_id, only: [:create, :destroy]
+      resources :goals, param: :id
+      resources :progresses, param: :id, only: [:create, :destroy]
     end
   end
 
