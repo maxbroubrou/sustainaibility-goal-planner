@@ -2,6 +2,7 @@ import React, {useState, useEffect, Fragment} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
+import Progress from "./Progress";
 import ProgressForm from "./ProgressForm";
 import styled from "styled-components";
 
@@ -43,22 +44,30 @@ const Goal = (properties) => {
             .catch(error => console.log(error))
     }, []);
 
+    const isFormValid = () => {
+        if(progress.entry_date === undefined || progress.achieved_reduction === undefined || progress.notes === undefined) {
+            return false;
+        }
+        return true;
+    };
+
     const handleChange = (e) => {
         e.preventDefault();
         setProgress(Object.assign({}, progress, {[e.target.name]: e.target.value}))
-
-        console.log('progress:', progress);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (!isFormValid()) {
+            console.log('Please fill in all fields.');
+            return;
+        }
+
         const csrfToken = document.querySelector('[name=csrf-token]').content;
         axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
         const id = goal.data.id
-        console.log('goal:', id);
-        console.log('progress:', { goal_id: id, ...progress});
         axios.post('/api/v1/progresses', { goal_id: id, ...progress })
         .then(response => {
             const included = [...goal.included, response.data.data]
@@ -66,6 +75,15 @@ const Goal = (properties) => {
             setProgress({entry_date: '', achieved_reduction: '', notes: ''})
         })
         .catch(error => console.log(error))
+    }
+
+    let progresses
+    if (loaded && goal.included){
+        progresses = goal.included.map((item, index) => {
+            return (
+                <Progress key={index} attributes={item.attributes}/>            
+            )
+        })
     }
 
     return (
@@ -78,7 +96,7 @@ const Goal = (properties) => {
                             attributes={goal.data.attributes}
                             progresses={goal.included}
                             />
-                        <div className="progresses"></div>
+                        {progresses}
                     </Main>
                 </Column>
                 <Column>
