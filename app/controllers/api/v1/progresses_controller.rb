@@ -15,13 +15,12 @@ module Api
             end
 
             def destroy
-                # goal = Goal.find_by(goal_id: params[:goal_id])
-                # log entry_id to 
-                Rails.logger.info "Info level message"
-                Rails.logger.info params[:entry_id]
-                puts params[:entry_id]
-                puts "Hello World"
-                progress = Progress.find_by(entry_id: params[:entry_id])
+                progress = Progress.find_by(id: params[:id])
+
+                if progress.nil?
+                    render json: { error: "Progress not found" }, status: 404
+                    return
+                end
 
                 if progress.destroy
                     head :no_content
@@ -33,7 +32,7 @@ module Api
             private
 
             def progress_params
-                params.require(:progress).permit(:entry_id, :goal_id, :entry_date, :achieved_reduction, :notes)
+                params.require(:progress).permit(:goal_id, :entry_date, :achieved_reduction, :notes)
             end
         end
     end

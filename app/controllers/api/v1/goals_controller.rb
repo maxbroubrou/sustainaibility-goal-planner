@@ -9,11 +9,7 @@ module Api
             end
 
             def show
-                Rails.logger.info "Info level message"
-                Rails.logger.info params[:goal_id]
-                puts params[:goal_id]
-                puts "Hello World"
-                goal = Goal.find_by(goal_id: params[:goal_id])
+                goal = Goal.find_by(id: params[:id])
                 render json: GoalSerializer.new(goal, options).serialized_json
             end
 
@@ -28,7 +24,12 @@ module Api
             end
             
             def update
-                goal = Goal.find_by(goal_id: params[:goal_id])
+                goal = Goal.find_by(id: params[:id])
+
+                if goal.nil?
+                    render json: { error: "Goal not found" }, status: 404
+                    return
+                end
 
                 if goal.update(goal_params)
                     render json: GoalSerializer.new(goal, options).serialized_json
@@ -38,7 +39,12 @@ module Api
             end
 
             def destroy
-                goal = Goal.find_by(goal_id: params[:goal_id])
+                goal = Goal.find_by(id: params[:id])
+                
+                if goal.nil?
+                    render json: { error: "Goal not found" }, status: 404
+                    return
+                end
 
                 if goal.destroy
                     head :no_content
@@ -50,7 +56,7 @@ module Api
             private
 
             def goal_params
-                params.require(:goal).permit(:goal_id, :goal_name, :target_reduction, :target_unit, :start_date, :end_date)
+                params.require(:goal).permit(:id, :goal_name, :target_reduction, :target_unit, :start_date, :end_date)
             end
 
             def options
