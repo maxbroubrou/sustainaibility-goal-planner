@@ -41,13 +41,13 @@ const Date = styled.div`
 
 
 const Header = (properties) => {
-    const { goal_name, goal_id, target_reduction, target_unit, current_progresses, start_date, end_date } = properties.attributes
+    const { goal_name, id, target_reduction, target_unit, current_progresses, start_date, end_date } = properties.attributes
 
     return (
         <Wrapper>
             <HeaderTitle>Goal : {goal_name}</HeaderTitle>
             <div>
-                <GoalId>Goal ID : {goal_id}</GoalId>
+                <GoalId>Goal ID : {id}</GoalId>
                 <ProgressBarWrapper>
                     <ProgressBar progress={current_progresses} target={target_reduction} />
                 </ProgressBarWrapper>

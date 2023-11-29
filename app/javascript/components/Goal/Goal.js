@@ -31,7 +31,7 @@ const Goal = (properties) => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        const url = `/api/v1/goals/${params.goal_id}`;
+        const url = `/api/v1/goals/${params.id}`;
 
         axios.get(url)
             .then(response => {

@@ -34,14 +34,14 @@ const Goal = (properties) => {
     return (
         <Card>
             <GoalName>{properties.attributes.goal_name}</GoalName>
-            <div className="goal-id">{properties.attributes.goal_id}</div>
+            <div className="goal-id">Goal n°{properties.attributes.id}</div>
             <div className="target-reduction">{properties.attributes.target_reduction}</div>
             <div className="target-unit">{properties.attributes.target_unit}</div>
             <div className="current-progresses">{properties.attributes.current_progresses}</div>
             <div className="start-date">{properties.attributes.start_date}</div>
             <div className="end-date">{properties.attributes.end_date}</div>
             <GoalLink>
-                <Link to={`/goals/${properties.attributes.goal_id}`}>View Goal</Link>
+                <Link to={`/goals/${properties.attributes.id}`}>View Goal</Link>
             </GoalLink>
         </Card>
     )
