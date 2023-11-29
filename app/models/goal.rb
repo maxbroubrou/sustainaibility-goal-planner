@@ -1,7 +1,5 @@
 class Goal < ApplicationRecord
-    has_many :progresses
-    # has_many :progresses, foreign_key: 'id'
-    # has_many :progresses, foreign_key: 'goals_id'
+    has_many :progresses, dependent: :destroy
 
     def current_progresses
         return 0 unless self.progresses.count.positive?
