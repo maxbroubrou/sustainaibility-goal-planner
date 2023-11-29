@@ -49,7 +49,6 @@ const Goals = () => {
     return (
         <Home>
             <Header>
-                <div>This is our the Goals#index view for our app.</div>
                 <h1>Goals</h1>
             </Header>
             <Grid>
