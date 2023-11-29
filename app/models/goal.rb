@@ -3,6 +3,6 @@ class Goal < ApplicationRecord
 
     def current_progresses
         return 0 unless self.progresses.count.positive?
-        self.progresses.average(:achieved_reduction).round(2).to_f
+        self.progresses.sum(:achieved_reduction).round(2).to_f
     end
 end
