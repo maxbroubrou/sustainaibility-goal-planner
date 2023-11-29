@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Fragment} from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Header from "./Header"; 
+import Header from "./Header";
+import ProgressForm from "./ProgressForm";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -42,24 +43,55 @@ const Goal = (properties) => {
             .catch(error => console.log(error))
     }, []);
 
+    const handleChange = (e) => {
+        e.preventDefault();
+        setProgress(Object.assign({}, progress, {[e.target.name]: e.target.value}))
+
+        console.log('progress:', progress);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const csrfToken = document.querySelector('[name=csrf-token]').content;
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+
+        const id = goal.data.id
+        console.log('goal:', id);
+        console.log('progress:', { goal_id: id, ...progress});
+        axios.post('/api/v1/progresses', { goal_id: id, ...progress })
+        .then(response => {
+            const included = [...goal.included, response.data.data]
+            setGoal({...goal, included})
+            setProgress({entry_date: '', achieved_reduction: '', notes: ''})
+        })
+        .catch(error => console.log(error))
+    }
+
     return (
         <Wrapper>
-            <Column>
-                <Main>
-                    {loaded &&
-                        <Header
-                        attributes={goal.data.attributes}
-                        progresses={goal.included}
-                        />
-                    } 
-                    <div className="progresses"></div>
-                </Main>
-            </Column>
-            <Column>
-                <div className="progress-form">[Progress form goes here]</div>
-            </Column>
+            {loaded &&
+            <Fragment>
+                <Column>
+                    <Main>
+                            <Header
+                            attributes={goal.data.attributes}
+                            progresses={goal.included}
+                            />
+                        <div className="progresses"></div>
+                    </Main>
+                </Column>
+                <Column>
+                    <ProgressForm
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    attributes={goal.data.attributes}
+                    progress={progress}
+                    />
+                </Column>
+            </Fragment>
+            } 
         </Wrapper>
-        // <div>This is our the Goals#show view for our app.</div>
     )
 }
 
